@@ -1,0 +1,9 @@
+_target_: models.ImageModelMobileNetV2.ImageModelMobileNetV2
+name: ImageModelMobileNetV2
+resize_shape: 96
+num_labels: 27
+loss_fn:
+  _target_: torch.nn.CrossEntropyLoss
+optimizer_fc:
+  _target_: utils.optimizers.Adam
+  lr: .01

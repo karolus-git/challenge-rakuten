@@ -1,0 +1,7 @@
+*.jpg
+*.csv
+*.log
+*/multirun
+*/outputs
+*/runs
+**/*.pyc

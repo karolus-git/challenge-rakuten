@@ -1,0 +1,46 @@
+defaults:
+  - model: TextModelEmbeddingBag
+
+paths:
+  log: "./runs"
+  data: "../data/raw"
+
+files:
+  features_data: X_train_update.csv
+  labels_data: Y_train_CVw08PX.csv
+
+dataset:
+  splits: [.7, .15, .15]
+  crop_shape: 400
+  resize_shape: 224
+  samples: 0
+  vocab_size: ${model.vocab_size}
+
+compilation:
+  batch_size: 32
+  num_workers: 6
+
+trainer:
+  _target_: lightning.Trainer
+  default_root_dir : "./runs"
+  max_epochs: 25
+  log_every_n_steps : 2
+  logger:
+    _target_: lightning.pytorch.loggers.TensorBoardLogger
+    save_dir: ${trainer.default_root_dir}
+    name: ${model.name}
+    default_hp_metric : false
+    log_graph: True
+  callbacks:
+    - _target_ : lightning.pytorch.callbacks.TQDMProgressBar
+    - _target_ : lightning.pytorch.callbacks.ModelCheckpoint
+      monitor: "val_loss"
+      mode: "min"
+      save_last: false
+      save_top_k: 3
+    - _target_ : lightning.pytorch.callbacks.EarlyStopping
+      monitor: "val_loss"
+      mode: "min"
+      min_delta: 0.0
+      patience: 3
+  

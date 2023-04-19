@@ -1,0 +1,10 @@
+_target_: models.TextModelEmbeddingBag.TextModelEmbeddingBag
+name: TextModelEmbeddingBag
+embedding_dim: 200
+vocab_size: 32005
+num_labels: 27
+loss_fn:
+  _target_: torch.nn.CrossEntropyLoss
+optimizer_fc:
+  _target_: utils.optimizers.Adam
+  lr: .01
