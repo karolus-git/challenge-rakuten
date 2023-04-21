@@ -6,8 +6,6 @@ import transformers
 import matplotlib.pyplot as plt
 import base64
 
-from models.ImageModelMobileNetV2 import ImageModelMobileNetV2
-from models.TextModelEmbedding import TextModelEmbedding
 from utils import preprocessors
 from utils import predictors
 
