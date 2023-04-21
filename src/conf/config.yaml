@@ -13,17 +13,17 @@ dataset:
   splits: [.7, .15, .15]
   crop_shape: 400
   resize_shape: 224
-  samples: 0
+  samples: 250 #Put 0 to learn from all data 
   vocab_size: ${model.vocab_size}
 
 compilation:
   batch_size: 32
-  num_workers: 6
+  num_workers: 0
 
 trainer:
   _target_: lightning.Trainer
   default_root_dir : "./runs"
-  max_epochs: 25
+  max_epochs: 2 #Add som epochs here ;)
   log_every_n_steps : 2
   logger:
     _target_: lightning.pytorch.loggers.TensorBoardLogger
