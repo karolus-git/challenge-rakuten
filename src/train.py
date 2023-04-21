@@ -14,7 +14,7 @@ from utils import saver
 logger = logging.getLogger(__name__)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
-def main(cfg : DictConfig):
+def run(cfg : DictConfig):
     print("Working directory : {}".format(os.getcwd()))
 
     #Get the model
@@ -42,7 +42,6 @@ def main(cfg : DictConfig):
 
     #trainer.fit(model, datamodule=datamodule)
     logger.info("training finished")
-    
 
 if __name__ == "__main__":
-    main()
+    run()
