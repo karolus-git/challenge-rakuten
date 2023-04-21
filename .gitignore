@@ -3,5 +3,4 @@
 *.log
 */multirun
 */outputs
-*/runs
 **/*.pyc
