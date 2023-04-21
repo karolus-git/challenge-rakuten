@@ -11,11 +11,11 @@ import components
 import utils
 
 #TODO link to .env file
-URL_FASTAPI_SERVING_FUSION_P = "http://localhost:8000/api/v1/predict/fusion"
-URL_FASTAPI_SERVING_TEXT_P = "http://localhost:8000/api/v1/predict/text"
-URL_FASTAPI_SERVING_TEXT_E = "http://localhost:8000/api/v1/explain/text"
-URL_FASTAPI_SERVING_IMAGE_P = "http://localhost:8000/api/v1/predict/image"
-URL_FASTAPI_SERVING_IMAGE_E = "http://localhost:8000/api/v1/explain/image"
+URL_FASTAPI_SERVING_FUSION_P = "http://fastapi:8000/api/v1/predict/fusion"
+URL_FASTAPI_SERVING_TEXT_P = "http://fastapi:8000/api/v1/predict/text"
+URL_FASTAPI_SERVING_TEXT_E = "http://fastapi:8000/api/v1/explain/text"
+URL_FASTAPI_SERVING_IMAGE_P = "http://fastapi:8000/api/v1/predict/image"
+URL_FASTAPI_SERVING_IMAGE_E = "http://fastapi:8000/api/v1/explain/image"
 
 #TODO move it somewehere else or handle it as an object ?
 label2categorie = {
@@ -166,7 +166,7 @@ def run():
                     data_instances = {
                         "image_url" : image_url_input,
                         "evals" : evals_shap,
-                        "topk" : topk_shap,
+                        "topk" : 5 #TODO change to variable
                     }
                     post_url_e = URL_FASTAPI_SERVING_IMAGE_E
                     post_url_p = URL_FASTAPI_SERVING_IMAGE_P         
@@ -178,9 +178,6 @@ def run():
                     headers={"content-type": "application/json"})
 
             #Post to backend for explanation
-
-            print(data_instances)
-            print(add_shap)
             if add_shap:
                 response_e = requests.post(
                         url=post_url_e, 
@@ -207,6 +204,7 @@ def run():
             results = np.array(json_response_p["results"])
             idx_max = results.argmax()
 
+            print(results)
             value_max = results[idx_max]
             label_max = list(prdcodetype2label.values())[idx_max]
 
