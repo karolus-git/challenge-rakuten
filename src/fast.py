@@ -15,11 +15,14 @@ import PIL
 import numpy as np
 import requests
 from pathlib import Path
+from hydra import compose, initialize
+from omegaconf import OmegaConf
 
 import models
 from utils import preprocessors
 from utils import explainers
 from utils import predictors
+from train import run
 
 #Where to pu your image from url ?
 UPLOAD_FOLDER = "./temp"
@@ -64,13 +67,19 @@ class FusionInput(BaseModel):
     evals: int = Field(..., example=100)
     topk: int = Field(..., example=5)
 
-
 def get_ckpt_path(name, version, ckpt):
 
     return f"./runs/{name}/{version}/checkpoints/{ckpt}.ckpt"
 
 def dynamic_import(name):
     return importlib.import_module(f"models.{name}")
+
+def load_cfg(overrides=[]):
+    
+    initialize(config_path="conf", job_name="config")
+    cfg = compose(config_name="config", overrides=overrides)
+
+    return cfg
 
 def load_model(settings):
     #Get settings
@@ -116,19 +125,36 @@ app = FastAPI(
 settings = Settings()
 dl_models = {}
 
-@app.on_event("startup")
-def startup_event():
-    """Load the models on startup according to the settings"""
-    for name in ["image", "fusion", "text"]:
-        model_info = vars(settings.model).get(name)
-        dl_models[name] = load_model(model_info)
-
 @app.get('/')
 def show_ping():
     """Am I alive ? """
     return {
         "Yes, I am alive ;)"
     }
+    
+@app.on_event("startup")
+def startup_event():
+    """Load the models on startup according to the settings"""
+    print("starting")
+    
+    for name in ["image", "fusion", "text"]:
+        model_info = vars(settings.model).get(name)
+        dl_models[name] = load_model(model_info)
+
+@app.post('/api/v1/train',)
+def train_model(request: Request, body: ModelInfo):
+    
+    #Get the configuration
+    model_to_train = f"model={body.name}"
+    cfg = load_cfg(overrides=[model_to_train])
+
+    #Run the training
+    run(cfg)
+
+    return {
+        "Training done"
+    }
+
 @app.post('/api/v1/predict/image',)
 def predict_image(request: Request, body: ImageInput):
     """
