@@ -97,11 +97,15 @@ def load_model(settings):
     model = getattr(module, model_name)
 
     #Load the weights
-    model = model.load_from_checkpoint(model_ckpt_path)
-    model.eval()
+    try:
+        model = model.load_from_checkpoint(model_ckpt_path)
+        model.eval()
 
-    print("imported : ",model_name)
-    return model
+        logger.info("imported : ",model_name)
+        return model
+    except Exception:
+        logger.error(f"no {model_name}'s ckpt at {model_ckpt_path}")
+        return None
 
 def save_image(url):
     #Get the image
@@ -135,7 +139,7 @@ def show_ping():
 @app.on_event("startup")
 def startup_event():
     """Load the models on startup according to the settings"""
-    print("starting")
+    logger.info("starting")
     
     for name in ["image", "fusion", "text"]:
         model_info = vars(settings.model).get(name)
@@ -248,7 +252,7 @@ def explain_text(request: Request, body: TextInput):
     try:
         #Get the text to explain
         text = body.text
-        print(text)
+
         shape_values = explainers.text(
             [text,], 
             dl_models["text"],
@@ -261,7 +265,7 @@ def explain_text(request: Request, body: TextInput):
         }
 
     except Exception as exce:
-        print(exce)
+        logger.warning(exce)
         return {
             "error": exce,
             "results": None
