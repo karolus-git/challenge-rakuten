@@ -39,8 +39,7 @@ def run(cfg : DictConfig):
 
     #Fit and validate the trainer (and the model)
     logger.info("training started")
-
-    #trainer.fit(model, datamodule=datamodule)
+    trainer.fit(model, datamodule=datamodule)
     logger.info("training finished")
 
 if __name__ == "__main__":
