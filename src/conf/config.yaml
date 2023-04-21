@@ -3,7 +3,7 @@ defaults:
 
 paths:
   log: "./runs"
-  data: "../data/raw"
+  data: "./data"
 
 files:
   features_data: X_train_update.csv

@@ -12,7 +12,7 @@ services:
     - 8000:8000
     volumes:
       - ./src/runs:/app/runs
-      - ./data/raw:/data
+      - ./data/raw:/app/data
 
   streamlit:
     container_name: cr_streamlit
