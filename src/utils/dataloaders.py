@@ -154,12 +154,16 @@ class DatasetTorch(torch.utils.data.Dataset):
         labels_path = Path(root_path, label_file)
 
         #Load csv files
-        df = pd.read_csv(features_path, index_col="index").astype(str).fillna(" ")
+        logger.info("reading the features dataframe")
+        df = pd.read_csv(features_path, index_col="Unnamed: 0").astype(str).fillna(" ")
         if samples:
             df = df.head(samples)
+            logger.info(f"features dataframe shrinked to {samples} samples")
+        logger.info(f"features dataframe contains {len(df)} samples")
 
         #Build links to images
         df["links"] = (root_path + "/images/image_train/image_" + df.imageid +"_product_" + df.productid + ".jpg").values
+        logger.info("linking product to image")
 
         #Merge columns
         df["text"] = df.designation +  " " + df.description
@@ -169,9 +173,13 @@ class DatasetTorch(torch.utils.data.Dataset):
         df["words_description"] = df.description.apply(lambda x : len(x))
 
         #Add the labels
+        logger.info("reading the labels dataframe")
         labels = pd.read_csv(labels_path, index_col="Unnamed: 0")
         if samples:
             labels = labels.head(samples)
+            logger.info(f"labels dataframe shrinked to {samples} samples")
+        logger.info(f"labels dataframe contains {len(df)} samples")
+
         df["labels"] = labels.prdtypecode
 
         self.le = LabelEncoder()
