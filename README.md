@@ -177,7 +177,7 @@ That it ! Go to `localhost:8501` to have fun with your streamlit app ;)
 
 ## To do ...
 
-- [ ] Update the docker-compose file
+- [X] Update the docker-compose file
 - [ ] Add new tokens to the tokenizer and save it in order to enrich the vocabulary
 - [ ] Load the tokenizer from Hydra
 - [ ] Verify the behavior of the image explainer : there is probably a swap of dimensions somewhere
@@ -186,7 +186,7 @@ That it ! Go to `localhost:8501` to have fun with your streamlit app ;)
 - [ ] Merge Hydra and .env ?
 - [ ] Add other scrapers
 - [ ] Enable the user to make a prediction on the test set
-- [ ] Allow the user to train a model from inside a container
+- [X] Allow the user to train a model from inside a container
 - [ ] Select the best versions of your models in the Hydra configuration file and load those versions in the `fast.py` script.
 
 ## Contributions
