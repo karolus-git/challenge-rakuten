@@ -15,7 +15,7 @@ import PIL
 import numpy as np
 import requests
 from pathlib import Path
-from hydra import compose, initialize
+import hydra
 from omegaconf import OmegaConf
 
 import models
@@ -76,8 +76,14 @@ def dynamic_import(name):
 
 def load_cfg(overrides=[]):
     
-    initialize(config_path="conf", job_name="config")
-    cfg = compose(config_name="config", overrides=overrides)
+    #Clear Conf
+    hydra.core.global_hydra.GlobalHydra.instance().clear()
+
+    #Initialize Hydra
+    hydra.initialize(config_path="conf", job_name="config")
+
+    #Get the config
+    cfg = hydra.compose(config_name="config", overrides=overrides)
 
     return cfg
 
