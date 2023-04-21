@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+
+  fastapi:
+    container_name: cr_fastapi
+    build:
+      context: ./src
+      dockerfile: ./Dockerfile
+    command: "uvicorn fast:app --host 0.0.0.0 --port 8000 --reload"
+    ports:
+    - 8000:8000
+    volumes:
+      - ./src/runs:/app/runs
+      - ./data/raw:/data
+
+  streamlit:
+    container_name: cr_streamlit
+    build:
+      context: ./streamlit
+      dockerfile: ./Dockerfile
+    command: "streamlit run --server.port 8502 --server.enableCORS false app.py"
+    ports:
+    - 8502:8502
+    depends_on:
+      - fastapi
+
+
