@@ -31,20 +31,22 @@ class FusionModel(pl.LightningModule):
         self.loss = metrics.loss(num_labels)
         self.val_loss = metrics.val_loss(num_labels)
 
+        #TODO load_state from dict and add attributes to the constructor  \
+        # to select the right versions of the models to load
         model_image = ImageModelMobileNetV2.ImageModelMobileNetV2()
-        model_image.load_state_dict(torch.load("./runs/ImageModelMobileNetV2/version_2/ImageModelMobileNetV2.pt"))
+        #model_image.load_state_dict(torch.load("./runs/ImageModelMobileNetV2/version_2/ImageModelMobileNetV2.pt"))
         model_image.eval()
 
         #Load the image model
         model_text = TextModelEmbeddingBag.TextModelEmbeddingBag()
-        model_text.load_state_dict(torch.load("./runs/TextModelEmbeddingBag/version_0/TextModelEmbeddingBag.pt"))
+        #model_text.load_state_dict(torch.load("./runs/TextModelEmbeddingBag/version_0/TextModelEmbeddingBag.pt"))
         model_text.eval()
 
         #Freeze the layers
         for param in model_text.parameters():
-            param.requires_grad = False
+            param.requires_grad = True
         for param in model_image.parameters():
-            param.requires_grad = False
+            param.requires_grad = True
 
         self.model_image = model_image
         self.model_text = model_text
