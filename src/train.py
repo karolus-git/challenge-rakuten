@@ -10,15 +10,13 @@ import logging
 from utils import dataloaders
 from utils import preprocessors
 from utils import saver
-from models.TextModelEmbedding import TextModelEmbedding
-from models.TextModelCamembert import TextModelCamembert
 
 logger = logging.getLogger(__name__)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
 def main(cfg : DictConfig):
     print("Working directory : {}".format(os.getcwd()))
-    
+
     #Get the model
     model = instantiate(cfg.model)
 
@@ -41,10 +39,8 @@ def main(cfg : DictConfig):
 
     #Fit and validate the trainer (and the model)
     logger.info("training started")
-    # model = model.load_from_checkpoint("./runs/TextModelEmbeddingBag/version_4/checkpoints/epoch=4-step=9290.ckpt")
-    # model.eval()
 
-    trainer.fit(model, datamodule=datamodule)
+    #trainer.fit(model, datamodule=datamodule)
     logger.info("training finished")
     
 
