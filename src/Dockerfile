@@ -10,6 +10,7 @@ RUN pip3 install -r requirements.txt
 
 COPY models ./models
 COPY utils ./utils
+COPY conf ./conf
 COPY fast.py .
 COPY train.py .
 COPY obj_labelencoder.pth .
