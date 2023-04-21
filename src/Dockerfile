@@ -8,13 +8,11 @@ COPY requirements.txt requirements.txt
 
 RUN pip3 install -r requirements.txt
 
-COPY models .
-COPY utils .
-COPY runs .
+COPY models ./models
+COPY utils ./utils
 COPY fast.py .
-#COPY train.py .
-COPY *.pth .
+COPY train.py .
+COPY obj_labelencoder.pth .
 COPY .env.fast .
-COPY __init__.py .
 
-EXPOSE 8080
+EXPOSE 8000
