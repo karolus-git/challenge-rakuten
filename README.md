@@ -95,7 +95,7 @@ dataset:
   splits: [.7, .15, .15]
   crop_shape: 400
   resize_shape: 224
-  samples: 0
+  samples: 0 #0 for all dataset
   vocab_size: ${model.vocab_size}
 
 compilation:
@@ -127,35 +127,31 @@ trainer:
       patience: 3
   ```
 
-### Train your Lightning models
+### Run everything
 
-First, please install the requirement libraries for the backend:
+First and last command line : 
 
 ```python
-cd src/
-pip install -r requirements.txt
+docker-compose up --build
 ```
+...and that's it. This command runs in two docker containers:
+- your frontend with Streamlit
+- your backend with fastAPI
 
-**TIP** : don't hesitate to use `pyenv` ...
+#### Train from docker
 
-Once everything is set up, train the model defined in your hydra file with :
+Everything is set up, but you don't have any models to use... (I couldn't upload them, they are much to heavy !). So let's train yours :)
 
-```
-python train.py
-```
+Go to your fastAPI container :
 
-**TIP 2** : hydra is very powerfull... For example, by running `python train.py --multirun model=TextModelEmbeddingBag,ImageModelMobileNetV2,FusionModel`, the three models will be trained. More details [here](https://hydra.cc/)
+http://<fast_api_container_IP>/docs#/default/train_model_api_v1_train_post
 
-The training must be done for the 3 models : text, image and fusion. Once that done, update the `src/.env.fast` file with the versions of the models you want to use.
+And edit the name of the model you want to train and execute the request. You can for example use the provided models such as :
+- "name": "TextModelEmbeddingBag"
+- "name": "ImageModelMobileNetV2"
+- "name": "FusionModel"
 
-Run your fastAPI server:
-```
-uvicorn fast:app
-```
-
-At this step, you will be able to make requests from `localhost:8000:docs`.
-
-**NOTE** the deploiement with Docker will arrive soon :)
+> **Info** : this coulb be long... Don't forget to modify your `src/conf/conf.yaml` to modify the training.
 
 Don't hesitate to follow the training of your models with `tensorboard`. Here are the validation accuracy and loss for the 
 <span style="color:cyan">TextModelEmbeddingBag</span>, <span style="color:magenta">ImageModelMobileNetV2</span> and <span style="color:orange">FusionModel</span>.
@@ -165,15 +161,8 @@ Don't hesitate to follow the training of your models with `tensorboard`. Here ar
 
 ### Make your prediction with the Streamlit frontend
 
-The backend is running, so the next step is to install the frontend libraries. To do so, please type the following command from the root directory :
+Everything is running, your models are trained, so the next step is to have fun with your streamlit app ;)
 
-```python
-cd streamlit/
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-That it ! Go to `localhost:8501` to have fun with your streamlit app ;)
 
 ## To do ...
 
