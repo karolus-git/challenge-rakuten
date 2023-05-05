@@ -45,7 +45,7 @@ Three different deep learning models are used to handle those features:
 
 ### Get the data
 
-The data can be found here : https://challengedata.ens.fr/challenges/59.
+The data can be found here : https://challengedata.ens.fr/challenges/35.
 
 ### Create your model(s) (or use the provided ones)
 
